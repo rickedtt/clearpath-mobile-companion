@@ -40,6 +40,14 @@ describe('ClearPath Mobile Companion', () => {
     expect(screen.getByText('Complete')).toBeInTheDocument();
   });
 
+  it('shows the owner-controlled jobsite check-in rule', () => {
+    render(<HomePage />);
+    fireEvent.click(screen.getByRole('button', { name: 'Owner' }));
+    expect(screen.getByText('Jobsite check-in rules')).toBeInTheDocument();
+    expect(screen.getByText(/PIN or address required/i)).toBeInTheDocument();
+    expect(screen.getByText('804 Juniper Ave')).toBeInTheDocument();
+  });
+
   it('switches to owner visibility and exposes team activity', () => {
     render(<HomePage />);
     fireEvent.click(screen.getByRole('button', { name: 'Owner' }));

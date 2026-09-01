@@ -114,3 +114,12 @@ button:focus-visible,textarea:focus-visible { outline:3px solid rgba(217,107,69,
 .location-button { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; margin-top: 8px; padding: 9px; border: 1px solid #c8d2cb; border-radius: 10px; background: #f4f8f4; color: #183b34; font: inherit; font-size: 12px; font-weight: 700; }
 .check-in-error { margin: 8px 0 0; color: #a34832; font-size: 11px; }
 .verified-badge { display: flex; align-items: center; gap: 5px; margin: -7px 16px 12px; color: #287050; font-size: 11px; font-weight: 700; }
+
+.check-in-rule-card { display: flex; align-items: center; gap: 10px; margin: 0 16px 14px; padding: 12px; border: 1px solid #dbe4dd; border-radius: 16px; background: #f7fbf7; }
+.rule-icon { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 10px; background: #dfeee2; color: #287050; }
+.check-in-rule-card > div:nth-child(2) { min-width: 0; flex: 1; }
+.check-in-rule-card strong, .check-in-rule-card p, .check-in-rule-card small { display: block; }
+.check-in-rule-card strong { color: #183b34; font-size: 12px; }
+.check-in-rule-card p { margin: 2px 0; color: #287050; font-size: 11px; font-weight: 700; }
+.check-in-rule-card small { overflow: hidden; color: #737a73; font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
+.rule-state { color: #287050; font-size: 11px; font-weight: 800; }
