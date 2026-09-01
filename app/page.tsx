@@ -58,11 +58,11 @@ function BottomNav({ active, onChange }: { active: string; onChange: (value: str
   );
 }
 
-function ClockCard({ clockedIn, onToggle }: { clockedIn: boolean; onToggle: () => void }) {
+function ClockCard({ clockedIn, jobsiteVerified, onToggle, onVerifyRequest }: { clockedIn: boolean; jobsiteVerified: boolean; onToggle: () => void; onVerifyRequest: () => void }) {
   return (
     <section className={`clock-card ${clockedIn ? 'clocked-in' : ''}`} aria-label="Shift status">
       <div className="clock-copy"><span className="eyebrow">{clockedIn ? 'On the clock' : 'Shift status'}</span><strong>{clockedIn ? '2h 18m' : 'Ready when you are'}</strong><span className="clock-meta">{clockedIn ? 'Since 8:12 AM · Oak Street HVAC' : 'Monday · September 1'}</span></div>
-      <button className="clock-button" onClick={onToggle} aria-label={clockedIn ? 'Clock out for today' : 'Clock in for today'}>
+      <button className="clock-button" onClick={clockedIn || jobsiteVerified ? onToggle : onVerifyRequest} aria-label={clockedIn ? 'Clock out for today' : 'Clock in for today'}>
         {clockedIn ? <Timer size={22} /> : <Clock3 size={22} />}{clockedIn ? 'Clock out' : 'Clock in'}
       </button>
     </section>
@@ -100,6 +100,26 @@ function JobDetail({ job, onBack, onStatus }: { job: Job; onBack: () => void; on
 
 function EmployeeView() {
   const [clockedIn, setClockedIn] = useState(true);
+  const [jobsiteVerified, setJobsiteVerified] = useState(false);
+  const [showCheckInGate, setShowCheckInGate] = useState(false);
+  const [jobsitePin, setJobsitePin] = useState('');
+  const [checkInError, setCheckInError] = useState('');
+  const verifyPin = () => {
+    if (jobsitePin === '4826') { setJobsiteVerified(true); setShowCheckInGate(false); setCheckInError(''); }
+    else setCheckInError('That PIN does not match the owner-approved jobsite PIN.');
+  };
+  const verifyLocation = () => { setJobsiteVerified(true); setShowCheckInGate(false); setCheckInError(''); };
+  const toggleClock = () => {
+    if (!clockedIn && !jobsiteVerified) { setShowCheckInGate(true); return; }
+    if (clockedIn) {
+      setClockedIn(false);
+      setJobsiteVerified(false);
+      setShowCheckInGate(true);
+      return;
+    }
+    setClockedIn(true);
+    setShowCheckInGate(false);
+  };
   const [activeNav, setActiveNav] = useState('Today');
   const [jobs, setJobs] = useState(employeeJobs);
   const [selectedJob, setSelectedJob] = useState<Job | null>(null);
@@ -121,7 +141,9 @@ function EmployeeView() {
   return (
     <div className="phone-content">
       <header className="app-header"><div><span className="eyebrow">Good morning</span><h1>{activeNav === 'Jobs' ? 'All jobs' : 'Jordan'}</h1></div><button className="avatar" aria-label="Open profile" onClick={() => setActiveNav('Me')}>JM<span className="online-dot" /></button></header>
-      {activeNav === 'Today' && <ClockCard clockedIn={clockedIn} onToggle={() => setClockedIn((value) => !value)} />}
+      {activeNav === 'Today' && <ClockCard clockedIn={clockedIn} jobsiteVerified={jobsiteVerified} onToggle={toggleClock} onVerifyRequest={() => setShowCheckInGate(true)} />}
+      {!clockedIn && showCheckInGate && <section className="check-in-gate" aria-label="Jobsite check-in"><div className="gate-heading"><MapPin size={18} /><div><strong>Owner-approved jobsite check required</strong><p>Enter the jobsite PIN or verify your location before clocking in.</p></div></div><label htmlFor="jobsite-pin">Jobsite PIN</label><div className="pin-row"><input id="jobsite-pin" inputMode="numeric" value={jobsitePin} onChange={(event) => setJobsitePin(event.target.value)} placeholder="Enter PIN" /><button className="primary-action" onClick={verifyPin} aria-label="Verify jobsite PIN">Verify PIN</button></div><button className="location-button" onClick={verifyLocation}><Navigation size={16} /> Verify location at jobsite</button>{checkInError && <p className="check-in-error" role="alert">{checkInError}</p>}<p className="helper-text">Demo rule: the owner or manager sets the PIN/address; production would use secure GPS geofencing or a managed site code.</p></section>}
+      {!clockedIn && jobsiteVerified && <p className="verified-badge" role="status"><CheckCircle2 size={15} /> Jobsite verified</p>}
       <section className="jobs-section"><div className="section-heading"><div><span className="eyebrow">{activeNav === 'Jobs' ? 'Monday route' : 'Today'}</span><h2>{jobs.length} assigned jobs</h2></div><button aria-label="Open schedule"><CalendarDays size={19} /></button></div><div className="job-list">{jobs.map((job) => <JobRow key={job.id} job={job} onOpen={setSelectedJob} />)}</div></section>
       <BottomNav active={activeNav} onChange={setActiveNav} />
     </div>

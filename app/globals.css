@@ -102,3 +102,15 @@ button:focus-visible,textarea:focus-visible { outline:3px solid rgba(217,107,69,
 }
 @media (max-width:380px) { .preview-toolbar strong { display:none; } .role-switcher button { min-width:72px; padding-inline:8px; } .clock-card { padding:12px; } .clock-copy strong { font-size:19px; } }
 @media (prefers-reduced-motion:reduce) { * { scroll-behavior:auto!important; transition:none!important; } }
+
+.check-in-gate { margin: 0 16px 16px; padding: 14px; border: 1px solid #d7c5a3; border-radius: 18px; background: #fff9ed; }
+.gate-heading { display: flex; gap: 9px; align-items: flex-start; color: #183b34; }
+.gate-heading strong { display: block; font-size: 13px; }
+.gate-heading p { margin: 4px 0 0; color: #6d716b; font-size: 11px; line-height: 1.4; }
+.check-in-gate > label { display: block; margin: 12px 0 5px; color: #59605a; font-size: 11px; font-weight: 700; }
+.pin-row { display: flex; gap: 7px; }
+.pin-row input { min-width: 0; flex: 1; border: 1px solid #d9d7cf; border-radius: 10px; padding: 9px 10px; font: inherit; font-size: 13px; }
+.pin-row .primary-action { padding: 9px 10px; border: 0; border-radius: 10px; background: #183b34; color: white; font: inherit; font-size: 12px; font-weight: 700; }
+.location-button { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; margin-top: 8px; padding: 9px; border: 1px solid #c8d2cb; border-radius: 10px; background: #f4f8f4; color: #183b34; font: inherit; font-size: 12px; font-weight: 700; }
+.check-in-error { margin: 8px 0 0; color: #a34832; font-size: 11px; }
+.verified-badge { display: flex; align-items: center; gap: 5px; margin: -7px 16px 12px; color: #287050; font-size: 11px; font-weight: 700; }

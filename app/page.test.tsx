@@ -10,12 +10,23 @@ describe('ClearPath Mobile Companion', () => {
     expect(screen.getByText(/Sample data only/i)).toBeInTheDocument();
   });
 
-  it('lets an employee clock out and back in', () => {
+  it('requires an owner-approved jobsite check before clocking in', () => {
     render(<HomePage />);
     fireEvent.click(screen.getByRole('button', { name: 'Clock out for today' }));
-    expect(screen.getByText('Ready when you are')).toBeInTheDocument();
+    expect(screen.getByText('Owner-approved jobsite check required')).toBeInTheDocument();
+    expect(screen.getByText(/Enter the jobsite PIN or verify your location/i)).toBeInTheDocument();
+    fireEvent.change(screen.getByLabelText('Jobsite PIN'), { target: { value: '4826' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Verify jobsite PIN' }));
+    expect(screen.getByText('Jobsite verified')).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Clock in for today' }));
     expect(screen.getByText('2h 18m')).toBeInTheDocument();
+  });
+
+  it('offers simulated location verification as an alternative to the PIN', () => {
+    render(<HomePage />);
+    fireEvent.click(screen.getByRole('button', { name: 'Clock out for today' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Verify location at jobsite' }));
+    expect(screen.getByText('Jobsite verified')).toBeInTheDocument();
   });
 
   it('opens a job and advances its status', () => {
